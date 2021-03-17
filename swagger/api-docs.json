@@ -1,0 +1,385 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Fake API",
+    "description": "Restful Api with Sqlite3 in NodeJs",
+    "license": {
+      "name": "Copyright © 2021 Scrumlab; Todos os direitos reservados.",
+      "url": "https://fakeapi.scrumlab.com.br"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Usuarios",
+      "description": "Ações de Usuários (Controller)"
+    }
+  ],
+  "paths": {
+    "/api/v1/users/login": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "Perform login of user receiving 'username' and 'password' returning the authorization token",
+        "requestBody": {
+          "description": "Login object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/basic_login"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successo",
+            "content": {}
+          },
+          "400": {
+            "description": "Erro",
+            "content": {}
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "body"
+      }
+    },
+    "/api/v1/users/logout": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "Perform logoff of current active user releasing the token",
+        "responses": {
+          "200": {
+            "description": "Successo",
+            "content": {}
+          },
+          "400": {
+            "description": "Erro",
+            "content": {}
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/api/v1/users/fetchAll": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "List all users in reduced mode (response)",
+        "responses": {
+          "200": {
+            "description": "Successo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/usuario_retorno_simples"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/erro_padrao"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/getUser/:id": {
+      "get": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "Show only a single user by their seq_usuario",
+        "responses": {
+          "200": {
+            "description": "Successo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/usuario_retorno"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Erro dado não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/erro_padrao"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/erro_padrao"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/addUser": {
+      "post": {
+        "tags": [
+          "Usuarios"
+        ],
+        "description": "Create a new user, and return their seq_usuario",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/dados_usuario"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/usuario_retorno"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "Erro dado não encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/erro_padrao"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/erro_padrao"
+                }
+              }
+            }
+          }
+        },
+        "x-codegen-request-body-name": "dados_usuario"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "basic_login": {
+        "required": [
+          "cpf",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "cpf": {
+            "type": "string",
+            "example": "username"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "password"
+          }
+        }
+      },
+      "dados_usuario": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "2"
+          }
+        }
+      },
+      "error_return": {
+        "type": "object",
+        "properties": {
+          "error_code": {
+            "type": "integer",
+            "example": 403
+          },
+          "error_message": {
+            "type": "string",
+            "example": "Erro irrecuperável nos dados"
+          }
+        }
+      },
+      "usuario_retorno": {
+        "type": "object",
+        "properties": {
+          "error_return": {
+            "$ref": "#/components/schemas/error_return"
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/users"
+            }
+          }
+        }
+      },
+      "usuario_retorno_simples": {
+        "type": "object",
+        "properties": {
+          "error_return": {
+            "$ref": "#/components/schemas/error_return"
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/users_simples"
+            }
+          }
+        }
+      },
+      "users": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "fullname": {
+            "type": "string",
+            "example": "Jose da Silva"
+          },
+          "cpf": {
+            "type": "string",
+            "example": "191.0"
+          },
+          "password": {
+            "type": "string",
+            "format": "password",
+            "example": "askdjalkj129823asdasdjklasdkljasd"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "cellphone": {
+            "type": "string",
+            "example": "669912345678"
+          },
+          "wallet": {
+            "type": "string",
+            "example": "@!#$%¨&*()DFGTYHJUR$%¨&*DSFGH%¨&*("
+          },
+          "deviceid": {
+            "type": "string",
+            "format": "string",
+            "example": "deveice_cliente"
+          }
+        }
+      },
+      "users_simples": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "fullname": {
+            "type": "string",
+            "example": "Jose da Silva"
+          },
+          "cpf": {
+            "type": "string",
+            "example": "11111111111"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      "id": {
+        "type": "number",
+        "description": "ID usuário",
+        "example": 1
+      },
+      "fullname": {
+        "type": "string",
+        "description": "Nome completo",
+        "example": "Jose da Silva"
+      },
+      "error": {
+        "type": "object",
+        "properties": {
+          "error_code": {
+            "type": "number",
+            "description": "Código do Erro",
+            "example": 409
+          },
+          "error_message": {
+            "type": "string",
+            "description": "Mensagem de erro",
+            "example": "Usuário não encontrado!"
+          }
+        },
+        "description": "Detalhe do erro"
+      },
+      "erro_padrao": {
+        "type": "array",
+        "description": "Erro padrão",
+        "items": {
+          "$ref": "#/components/schemas/error"
+        }
+      }
+    },
+    "responses": {
+      "UnauthorizedError": {
+        "description": "Token não informado ou inválido!",
+        "content": {}
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "format": "JWT"
+      }
+    }
+  }
+}

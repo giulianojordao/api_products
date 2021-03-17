@@ -1,0 +1,52 @@
+{
+    "info": {
+      "title": "Hello World",
+      "version": "1.0.0",
+      "description": "A sample API"
+    },
+    "tags": [
+      "Atendentes",
+      "Usuarios"
+    ],
+    "host": "localhost",
+    "basePath": "/",
+    "securityDefinitions": "",
+    "swagger": "2.0",
+    "paths": {
+      "/api/v1/atendentes/showAttendant": {
+        "post": {
+          "tags": [
+            "Atendentes"
+          ],
+          "summary": "Show a specific attendant.",
+          "description": "This will show an attendant by the informed seq_atendente.",
+          "consumes": "— application/json",
+          "parameters": {
+            "— name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "seq_atendente": null,
+                "type": "integer"
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Sucesso."
+            },
+            "400": {
+              "description": "Erro no processo."
+            },
+            "500": {
+              "description": "Erro interno no servidor."
+            }
+          }
+        }
+      }
+    },
+    "definitions": {},
+    "responses": {},
+    "parameters": {}
+  }
