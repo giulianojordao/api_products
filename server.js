@@ -33,6 +33,8 @@ var tokenize = require('./middleware/middleware');
 //! Routers
 const usersRouter = require('./routers/users_router');
 const cartsRouter = require('./routers/carts_router');
+const categoriesRouter = require('./routers/categories_router');
+const productsRouter = require('./routers/products_router');
 
 //! Enabling HTTPS
 var privateKey = fs.readFileSync("certs/serverkey.pem");
@@ -129,6 +131,8 @@ app.get('/', tokenize.verifyJWT, function (req, res) {
 
 app.use('/api/v1/users', usersRouter);
 app.use('/api/v1/carts', cartsRouter);
+app.use('/api/v1/categories', categoriesRouter);
+app.use('/api/v1/products', productsRouter);
 
 //! Starting the server
 http.createServer(app).listen(HTTP_PORT, function() {
