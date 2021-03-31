@@ -22,7 +22,7 @@ const tokenize = require('../middleware/middleware');
     router.get('/logout', tokenize.verifyJWT, usersCtrl.logout);
 
     router.get('/fetchAll', tokenize.verifyJWT, usersCtrl.fetchAll);
-    router.get('/getUser/:id', tokenize.verifyJWT, usersCtrl.getUser);
+    router.get('/getUser', tokenize.verifyJWT, usersCtrl.getUser);
 
     router.post('/addUser', tokenize.verifyJWT, usersCtrl.addUser);
     router.delete('/deleteUser/:id', tokenize.verifyJWT, usersCtrl.deleteUser);

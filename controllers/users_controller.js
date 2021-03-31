@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 //* database link
 var db = require("../database/database_module");
 var md5 = require("md5");
+const { fetchAll } = require('./carts_controllers');
 
     //! Authentication
     exports.login = async function (req, res, _next) {
@@ -31,11 +32,11 @@ var md5 = require("md5");
             } else {
                 const id = result?.id;
                 const token = jwt.sign({id}, tokenSecret, {
-                    expiresIn: 300
+                    expiresIn: 3000
                 });
 
                 var now = new Date();
-                now.setSeconds(now.getSeconds() + 300);
+                now.setSeconds(now.getSeconds() + 3000);
 
                 res.status(200).json({
                     "auth": true, 
@@ -84,7 +85,22 @@ var md5 = require("md5");
 
     exports.getUser = async function(req, res, _next) {
         var sqlQuery = "select * from users where id = ?";
-        var idUsuario = [req.params.id];
+        
+        var tokenSecret = process.env.SECRET;
+        const token = req.headers['authorization'];
+
+        var bearer = token.split(' ');
+        var bearerToken = bearer[1];
+
+        var idUsuario = jwt.verify(bearerToken,tokenSecret, function(err, decoded){
+            if (err){
+                return null;
+            }else{
+                return decoded.id;
+            }
+        });
+
+        if(idUsuario != null){
 
         db.get(sqlQuery, idUsuario, (err, row) => {
             if(err){
@@ -110,7 +126,18 @@ var md5 = require("md5");
                 });
             }
         });
-
+    }
+    else{
+        res.status(400).json(
+            {
+                "message": err.message,
+                "errors": {
+                    "errorCode": 400,
+                    "errorStatus": "Erro no acesso aos dados",
+                    "errorMessage": "ERRO NO ACESSO"
+                }
+        });
+    }
     }
 
     exports.addUser = async function(req, res, _next) {
