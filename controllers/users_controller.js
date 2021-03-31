@@ -11,6 +11,23 @@ var db = require("../database/database_module");
 var md5 = require("md5");
 const { fetchAll } = require('./carts_controllers');
 
+async function getTokenData (req, callback) {
+    var tokenSecret = process.env.SECRET;
+    const token = req.headers['authorization'];
+
+    var bearer = token.split(' ');
+    var bearerToken = bearer[1];
+
+    var idUsuario = jwt.verify(bearerToken,tokenSecret, function(err, decoded){
+        if (err){
+            return null;
+        }else{
+            return decoded.id;
+        }
+    });
+
+    callback(idUsuario);
+}
     //! Authentication
     exports.login = async function (req, res, _next) {
         var cpf = req.body.cpf;
@@ -67,6 +84,8 @@ const { fetchAll } = require('./carts_controllers');
         });
     };
 
+    exports.getTokenData = getTokenData
+
     //! PUT HERE ALL THE API Endpoints
     exports.fetchAll = async function(_req, res, _next) {
         var sql = "select * from users";
@@ -83,21 +102,13 @@ const { fetchAll } = require('./carts_controllers');
         });
     }
 
+
     exports.getUser = async function(req, res, _next) {
         var sqlQuery = "select * from users where id = ?";
+        var idUsuario = null;
         
-        var tokenSecret = process.env.SECRET;
-        const token = req.headers['authorization'];
-
-        var bearer = token.split(' ');
-        var bearerToken = bearer[1];
-
-        var idUsuario = jwt.verify(bearerToken,tokenSecret, function(err, decoded){
-            if (err){
-                return null;
-            }else{
-                return decoded.id;
-            }
+        getTokenData(req, (id) => {
+            idUsuario = id;
         });
 
         if(idUsuario != null){
