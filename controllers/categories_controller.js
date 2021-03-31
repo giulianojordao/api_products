@@ -21,7 +21,7 @@ var md5 = require("md5");
             }
             res.json({
                 "message":"success",
-                "data":rows
+                "products":rows
             })
         });
     };
@@ -36,7 +36,7 @@ var md5 = require("md5");
             }
             res.json({
                 "message":"success",
-                "data":rows
+                "categories":rows
             })
         });
     };
@@ -51,7 +51,7 @@ var md5 = require("md5");
             }
             res.json({
                 "message":"success",
-                "data":rows
+                "categories":rows
             })
         });
     };

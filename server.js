@@ -29,7 +29,6 @@ var md5 = require("md5");
 
 var tokenize = require('./middleware/middleware');
 
-
 //! Routers
 const usersRouter = require('./routers/users_router');
 const cartsRouter = require('./routers/carts_router');
